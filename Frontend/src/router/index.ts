@@ -1,8 +1,20 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router';
+import Homepage from '@/views/Homepage.vue';
+import SignIn from '@/views/SignIn.vue';
+import SignUp from '@/views/SignUp.vue';
+import NotFound from '@/views/NotFound.vue';
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [],
-})
+const routes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    component: Homepage,
+  },
+  { path: '/signin', component: SignIn },
+  { path: '/signup', component: SignUp },
+  { path: '/:pathMatch(.*)*', component: NotFound },
+];
 
-export default router
+const router = createRouter({ history: createWebHistory(import.meta.env.BASE_URL), routes });
+
+export default router;
