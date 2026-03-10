@@ -4,10 +4,10 @@ import SignUp from './SignUp.vue';
 
 <template>
   <section
-    class="bg-dark-khaki-300/70 flex min-h-screen w-screen items-center justify-center overflow-y-auto"
+    class="bg-dark-khaki-300/55 flex min-h-screen w-screen items-center justify-center overflow-y-auto"
   >
     <div
-      class="bg-dark-khaki-200 font-poppins fixed w-full rounded-xl border border-black/6 drop-shadow-lg drop-shadow-black/20 sm:max-w-sm md:max-w-sm lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl"
+      class="bg-dark-khaki-200 font-poppins sm:max-sm fixed w-full rounded-xl border border-black/6 drop-shadow-lg drop-shadow-black/20 md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl"
     >
       <div class="my-5 flex w-full flex-col items-center justify-center">
         <img src="../assets/img/logo5.png" alt="" class="w-3/9" />
