@@ -1,55 +1,61 @@
 <script setup lang="ts">
-import { HomeIcon } from 'lucide-vue-next';
+import { Heart, HomeIcon, Plus, Search, UserIcon } from 'lucide-vue-next';
+import { User2Icon } from 'lucide-vue-next';
 </script>
+
 <template>
   <div
-    class="hover:bg-jungle-green-900 font-poppins bg-dark-khaki-500 text-dark-khaki-300/0 text-opacity-0 absolute flex h-full w-20 items-center px-4 shadow-md shadow-black duration-200 ease-in-out hover:w-60 hover:text-white hover:opacity-100"
+    class="sm:hover:bg-jungle-green-900 font-poppins bg-dark-khaki-500 text-dark-khaki-300/0 text-opacity-0 fixed bottom-0 flex h-20 w-full flex-row items-center justify-center shadow-md shadow-black duration-200 ease-in-out hover:w-60 hover:text-white hover:opacity-100 sm:h-full sm:w-20 sm:flex-col"
   >
-    <ul class="flex flex-col gap-8">
-      <li class="flex w-30 items-center gap-5">
-        <a href="#"><img src="../assets/img/home3.png" alt="" class="h-8.5 w-8.5" /></a>
-        <p class="">Home</p>
+    <ul class="flex w-full sm:flex-col sm:gap-8">
+      <li class="flex h-full w-full items-center justify-center gap-5 sm:w-36">
+        <a href="#"><HomeIcon class="h-8 w-8 stroke-white stroke-1"></HomeIcon></a>
+        <p class="hidden sm:block">Home</p>
       </li>
-      <li class="flex w-30 items-center gap-5">
-        <a href="#"><img src="../assets/img/searchWhite.png" alt="" class="h-8 w-8" /></a>
-        <p class="">Search</p>
+      <li class="flex h-full w-full items-center justify-center gap-5 sm:w-37">
+        <a href="#"><Search class="h-8 w-8 stroke-white stroke-1"></Search></a>
+        <p class="hidden sm:block">Search</p>
       </li>
-      <li class="flex w-30 items-center gap-5">
+      <li class="flex h-full w-full items-center justify-center gap-5 sm:w-37">
         <a href="#"
-          ><img
-            src="../assets/img/plusWhite.png"
-            alt=""
-            class="h-9 w-9 rounded-lg border border-black/5 bg-black/10 p-1.5"
-        /></a>
-        <p class="">Create</p>
+          ><Plus
+            class="h-10 w-10 rounded-lg border border-black/5 bg-black/10 stroke-white stroke-1"
+          ></Plus
+        ></a>
+        <p class="hidden sm:block">Create</p>
       </li>
-      <li class="flex w-50 items-center gap-5">
-        <a href="#"><img src="../assets/img/heartNewWhite.png" alt="" class="h-8 w-8" /></a>
-        <p class="">Notifications</p>
+      <li class="flex h-full w-full items-center justify-center gap-5 sm:w-50">
+        <a href="#"><Heart class="h-8 w-8 stroke-white stroke-1"></Heart></a>
+        <p class="hidden sm:block">Notifications</p>
       </li>
-      <li class="absolute bottom-20 flex w-30 items-center gap-5">
+      <li class="flex h-full w-full items-center justify-center gap-5 sm:w-37">
+        <a href="#"><UserIcon class="h-8 w-8 stroke-white stroke-1"></UserIcon></a>
+        <p class="hidden sm:block">Profile</p>
+      </li>
+      <!--<li class="absolute bottom-20 flex w-30 items-center gap-5">
         <a href="#"><img src="../assets/img/settingNewWhite.png" alt="" class="h-8 w-8" /></a>
         <p class="">Setting</p>
-      </li>
+      </li>-->
     </ul>
   </div>
   <section
     class="bg-dark-khaki-300/55 font-poppins flex min-h-screen w-screen items-center justify-center text-white"
   >
-    <div class="h-full w-3/15"></div>
     <div class="flex h-screen w-full justify-center py-4">
       <h1 class="text-2xl font-medium text-black/50">Feed</h1>
       <div class=""></div>
     </div>
-    <div class="bg-dark-khaki-500 flex h-screen w-3/15 px-4 py-4 shadow-md shadow-black">
-      <ul>
-        <li class="flex items-center gap-19">
+    <div
+      class="fixed top-0 right-0 hidden w-3/15 py-4 drop-shadow-lg drop-shadow-black/20 sm:block"
+    >
+      <ul class="flex h-full w-full">
+        <li class="flex w-full items-center justify-end gap-12">
           <img
             src="../assets/img/user.png"
             alt=""
-            class="h-10 w-10 drop-shadow-lg drop-shadow-black/30"
+            class="bg-amber-90 h-10 w-10 items-end drop-shadow-md drop-shadow-black/20"
           />
-          <p class="">Logout</p>
+          <p class="px-4 text-end drop-shadow-sm drop-shadow-black/30 cursor-pointer">Logout</p>
         </li>
       </ul>
     </div>
