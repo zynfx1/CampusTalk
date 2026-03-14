@@ -1,5 +1,29 @@
 <script setup lang="ts">
-import SignUp from './SignUp.vue';
+import { ref } from 'vue';
+import type { userTypes } from '@/types/user';
+import { authFunction } from '@/stores/authStore';
+const newUserName = ref('');
+const newUserEmail = ref('');
+const newUserPass = ref('');
+
+const authStore = authFunction();
+
+const signUpUser = () => {
+  if (newUserName.value === '' && newUserEmail.value === '' && newUserPass.value === '') {
+    return;
+  }
+
+  const user: userTypes = {
+    id: Date.now(),
+    user_name: newUserName.value,
+    user_email: newUserEmail.value,
+    user_pass: newUserPass.value,
+  };
+  newUserName.value = '';
+  newUserEmail.value = '';
+  newUserPass.value = '';
+  authStore.signUpUser(user);
+};
 </script>
 
 <template>
@@ -18,25 +42,29 @@ import SignUp from './SignUp.vue';
           class="focus:border-jungle-green-900 bg-user h-15 w-full rounded-xl border-2 border-black/10 bg-size-[auto_25px] bg-position-[left_10px_center] bg-no-repeat px-10 shadow-lg shadow-black/15 focus:outline-none"
           type="text"
           placeholder="Username"
+          v-model="newUserName"
         />
         <input
           class="focus:border-jungle-green-900 bg-email h-15 w-full rounded-xl border-2 border-black/10 bg-size-[auto_25px] bg-position-[left_10px_center] bg-no-repeat px-10 shadow-lg shadow-black/15 focus:outline-none"
           type="text"
           placeholder="Email"
+          v-model="newUserEmail"
         />
         <input
           class="focus:border-jungle-green-900 bg-password h-15 w-full rounded-xl border-2 border-black/10 bg-size-[auto_25px] bg-position-[left_10px_center] bg-no-repeat px-10 shadow-lg shadow-black/15 focus:outline-none"
           type="text"
           placeholder="Password"
+          v-model="newUserPass"
         />
         <button
+          @click.prevent="signUpUser"
           class="bg-jungle-green-900 h-15 w-full cursor-pointer rounded-xl border-2 border-white/10 text-white"
         >
           Sign Up
         </button>
         <p class="mb-5 h-full w-full text-center text-sm text-black/60" href="#">
           Already have an account?
-          <a href="/signin" class="text-jungle-green-900 font-bold">Log In</a>
+          <a href="/auth/signin" class="text-jungle-green-900 font-bold">Log In</a>
         </p>
       </div>
     </div>

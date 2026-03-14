@@ -44,7 +44,7 @@ import SignUp from './SignUp.vue';
         </button>
         <p class="mb-5 h-full w-full text-center text-sm text-black/60" href="#">
           Don't have an account?
-          <a href="/signup" class="text-jungle-green-900 font-bold">Sign Up</a>
+          <a href="/auth/signup" class="text-jungle-green-900 font-bold">Sign Up</a>
         </p>
       </div>
     </div>
