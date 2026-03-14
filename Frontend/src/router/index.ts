@@ -10,8 +10,8 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: Homepage,
   },
-  { path: '/signin', component: SignIn },
-  { path: '/signup', component: SignUp },
+  { path: '/auth/signin', component: SignIn },
+  { path: '/auth/signup', component: SignUp },
   { path: '/:pathMatch(.*)*', component: NotFound },
 ];
 
