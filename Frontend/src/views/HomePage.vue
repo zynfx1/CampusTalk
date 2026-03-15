@@ -55,7 +55,11 @@ import { User2Icon } from 'lucide-vue-next';
             alt=""
             class="bg-amber-90 h-10 w-10 items-end drop-shadow-md drop-shadow-black/20"
           />
-          <p class="cursor-pointer px-4 text-end drop-shadow-sm drop-shadow-black/30 text-nowrap">Sign in</p>
+          <p
+            class="hidden cursor-pointer px-4 text-end text-nowrap drop-shadow-sm drop-shadow-black/30"
+          >
+            Sign in
+          </p>
           <p class="cursor-pointer px-4 text-end drop-shadow-sm drop-shadow-black/30">Logout</p>
         </li>
       </ul>

@@ -3,24 +3,22 @@ import SignUp from './SignUp.vue';
 </script>
 
 <template>
-  <section
-    class="bg-dark-khaki-300/55 flex min-h-screen w-screen items-center justify-center overflow-y-auto"
-  >
+  <section class="bg-dark-khaki-300/55 flex min-h-dvh w-full items-center justify-center">
     <div
-      class="bg-dark-khaki-200 font-poppins sm:max-sm fixed w-full rounded-xl border border-black/6 drop-shadow-lg drop-shadow-black/20 md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl"
+      class="bg-dark-khaki-200 font-poppins m-5 h-full rounded-xl border border-black/6 drop-shadow-lg drop-shadow-black/20 sm:max-w-md md:max-w-lg"
     >
       <div class="my-5 flex w-full flex-col items-center justify-center">
         <img src="../assets/img/logo5.png" alt="" class="w-3/9" />
-        <p class="text-gray-800/50">Drop your campus experience.</p>
+        <p class="px-5 text-center text-gray-800/50">Drop your campus experience.</p>
       </div>
-      <div class="flex w-full flex-col items-center justify-center gap-5 px-20">
+      <div class="flex w-full flex-col items-center justify-center gap-5 px-4 sm:px-8">
         <input
-          class="focus:border-jungle-green-900 bg-email h-15 w-full rounded-xl border-2 border-black/10 bg-size-[auto_25px] bg-position-[left_10px_center] bg-no-repeat px-10 shadow-lg shadow-black/15 focus:outline-none"
+          class="focus:border-jungle-green-900 bg-email h-15 w-full rounded-xl border-2 border-black/10 bg-size-[auto_25px] bg-position-[left_10px_center] bg-no-repeat px-12 shadow-lg shadow-black/15 focus:outline-none"
           type="text"
           placeholder="Email"
         />
         <input
-          class="focus:border-jungle-green-900 bg-password h-15 w-full rounded-xl border-2 border-black/10 bg-size-[auto_25px] bg-position-[left_10px_center] bg-no-repeat px-10 shadow-lg shadow-black/15 focus:outline-none"
+          class="focus:border-jungle-green-900 bg-password h-15 w-full rounded-xl border-2 border-black/10 bg-size-[auto_25px] bg-position-[left_10px_center] bg-no-repeat px-12 shadow-lg shadow-black/15 focus:outline-none"
           type="text"
           placeholder="Password"
         />
