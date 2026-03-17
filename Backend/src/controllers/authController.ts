@@ -24,3 +24,20 @@ export const signUp = async (req: Request, res: Response) => {
       .json({ msg: 'Failed to register user account in database' });
   }
 };
+
+const signIn = async (req: Request, res: Response) => {
+  const { userEmail, userPass } = req.body;
+
+  const result = await pool.query(
+    'SELECT * FROM user_table WHERE user_email = $1',
+    [userEmail],
+  );
+  const user = result.rows[0];
+
+  if (!user) {
+    res.status(401).json({ msg: 'Invalid Credentials' });
+    return;
+  }
+
+  const isMatch = await bcrypt.compare(userPass, user.user_pass);
+};
