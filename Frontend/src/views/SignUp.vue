@@ -2,7 +2,6 @@
 import { computed, ref } from 'vue';
 import type { userTypes } from '@/types/user';
 import { authFunction } from '@/stores/authStore';
-import router from '../router/index.ts';
 const newUserName = ref('');
 const newUserEmail = ref('');
 const newUserPass = ref('');

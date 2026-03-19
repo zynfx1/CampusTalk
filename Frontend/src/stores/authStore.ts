@@ -11,11 +11,11 @@ export const authFunction = defineStore('authFunc', () => {
     try {
       isLoading.value = true;
       const response = await api.post('/auth/sign-up', user);
-     
+      console.log(response.data.res);
     } catch (error) {
       console.log(error);
     } finally {
-      isLoading.value = false;  
+      isLoading.value = false;
       router.push({ path: '/' });
     }
   };
