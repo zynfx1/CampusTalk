@@ -1,6 +1,4 @@
-<script setup lang="ts">
-import SignUp from './SignUp.vue';
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <section class="bg-dark-khaki-300/55 flex min-h-dvh w-full items-center justify-center">

@@ -1,8 +1,7 @@
-import e, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import pool from '../config/db';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { strict } from 'assert';
 
 export const signUp = async (req: Request, res: Response) => {
   const { userName, userEmail, userPass } = req.body;
@@ -27,7 +26,7 @@ export const signUp = async (req: Request, res: Response) => {
   }
 };
 
-const signIn = async (req: Request, res: Response) => {
+export const signIn = async (req: Request, res: Response) => {
   const { userEmail, userPass } = req.body;
 
   try {
