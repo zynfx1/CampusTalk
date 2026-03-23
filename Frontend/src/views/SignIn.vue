@@ -1,5 +1,28 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue';
+import type { userTypes } from '../types/user';
+import { authFunction } from '../stores/authStore';
 
+const auth = authFunction();
+const currentUserEmail = ref('');
+const currentUserPass = ref('');
+
+const signInUser = () => {
+  if (currentUserEmail.value === '' || currentUserPass.value === '') {
+    return;
+  }
+
+  const user: userTypes = {
+    id: Date.now(),
+    userName: '',
+    userEmail: currentUserEmail.value,
+    userPass: currentUserPass.value,
+  };
+  currentUserEmail.value = '';
+  currentUserPass.value = '';
+  auth.signInUser(user);
+};
+</script>
 <template>
   <section class="bg-dark-khaki-300/55 flex min-h-dvh w-full items-center justify-center">
     <div
@@ -16,14 +39,18 @@
             type="text"
             placeholder="Email"
             required
+            v-model="currentUserEmail"
           />
           <input
             class="focus:border-jungle-green-900 bg-password h-15 w-full rounded-xl border-2 border-black/10 bg-size-[auto_25px] bg-position-[left_10px_center] bg-no-repeat px-12 shadow-lg shadow-black/15 focus:outline-none"
             type="text"
             placeholder="Password"
             required
+            v-model="currentUserPass"
           />
           <button
+            type="button"
+            @click="signInUser"
             class="bg-jungle-green-900 h-15 w-full cursor-pointer rounded-xl border-2 border-white/10 text-white"
           >
             Sign In
