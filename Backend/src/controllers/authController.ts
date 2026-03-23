@@ -45,6 +45,7 @@ export const signIn = async (req: Request, res: Response) => {
 
     if (!isMatch) {
       res.status(401).json({ msg: 'Invalid Credentials' });
+      return;
     }
 
     const token = jwt.sign(

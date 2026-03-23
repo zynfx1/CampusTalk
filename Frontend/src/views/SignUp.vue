@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import somethingWentWrong from '../components/somethingWentWrong.vue';
 import { computed, ref } from 'vue';
 import type { userTypes } from '@/types/user';
-import { authFunction } from '@/stores/authStore';
+import { authFunction, errorWentWrongModal } from '@/stores/authStore';
 const newUserName = ref('');
 const newUserEmail = ref('');
 const newUserPass = ref('');
 
 const authStore = authFunction();
+const errorModal = errorWentWrongModal();
 
 const signUpUser = () => {
   if (newUserName.value === '' || newUserEmail.value === '' || newUserPass.value === '') {
@@ -29,6 +31,10 @@ const buttonDisabled = computed(() => ['disabled:opacity-50', 'disabled:cursor-n
 </script>
 
 <template>
+  <somethingWentWrong
+    @close="errorModal.closeErrorModal"
+    :showModal="errorModal.isErrorModalVisible"
+  ></somethingWentWrong>
   <section class="bg-dark-khaki-300/70 flex min-h-dvh w-full items-center justify-center">
     <div
       class="bg-dark-khaki-200 font-poppins m-5 h-full rounded-xl border border-black/6 drop-shadow-lg drop-shadow-black/20 sm:max-w-md md:max-w-lg"
