@@ -28,6 +28,12 @@ export const signUp = async (req: Request, res: Response) => {
 
 export const signIn = async (req: Request, res: Response) => {
   const { userEmail, userPass } = req.body;
+  const jwtSecret = process.env.JWT_SECRET;
+
+  if (!jwtSecret) {
+    console.error('JWT Secret is missing');
+    return res.status(401).json({ msg: 'Server error configuration' });
+  }
 
   try {
     const result = await pool.query(
@@ -48,11 +54,9 @@ export const signIn = async (req: Request, res: Response) => {
       return;
     }
 
-    const token = jwt.sign(
-      { userId: user.user_id },
-      process.env.JWT_SECRET as string,
-      { expiresIn: '1hr' },
-    );
+    const token = jwt.sign({ userId: user.user_id }, jwtSecret, {
+      expiresIn: '1h',
+    });
 
     res.cookie('auth_token', token, {
       httpOnly: true,
