@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import pool from '../config/db';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { authRequest } from '../middleware/authMiddleware';
 
 export const signUp = async (req: Request, res: Response) => {
   const { userName, userEmail, userPass } = req.body;
@@ -73,4 +74,11 @@ export const signIn = async (req: Request, res: Response) => {
     console.error(error);
     res.status(500).json({ msg: 'Server error during log in' });
   }
+};
+
+export const userProfile = async (req: authRequest, res: Response) => {
+  const userId = req.userId;
+  try {
+    res.status(200).json({ msg: `You are authorized`, res: userId });
+  } catch (error) {}
 };
