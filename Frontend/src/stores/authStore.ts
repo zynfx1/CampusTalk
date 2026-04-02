@@ -24,7 +24,7 @@ export const authFunction = defineStore('authFunc', () => {
   const signInUser = async (user: userTypes) => {
     try {
       const response = await api.post('/auth/sign-in', user);
-      console.log(response.data.user);
+      console.log(response.data.user.email);
       await router.replace({ path: '/' });
     } catch (error) {
       console.log(error);

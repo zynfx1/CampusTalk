@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import authRouter from './routes/authRoutes';
+import usersRouter from './routes/usersRoutes';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use('/api/auth', authRouter);
+app.use('/api/users', usersRouter);
 const PORT = 3000;
 
 app.listen(PORT, () =>
