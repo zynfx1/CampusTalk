@@ -1,5 +1,13 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import { RouterView } from 'vue-router';
+import { authFunction } from './stores/authStore';
+
+const authStore = authFunction();
+
+onMounted(() => {
+  authStore.checkAuthProfile();
+});
 </script>
 
 <template>

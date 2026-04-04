@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Heart, HomeIcon, Plus, Search, UserIcon } from 'lucide-vue-next';
 import { User2Icon } from 'lucide-vue-next';
+import { authFunction } from '../stores/authStore';
+const authStore = authFunction();
 </script>
 
 <template>
@@ -55,15 +57,20 @@ import { User2Icon } from 'lucide-vue-next';
             alt=""
             class="bg-amber-90 h-10 w-10 items-end drop-shadow-md drop-shadow-black/20"
           />
-          <p class="cursor-pointer px-4 text-end text-nowrap drop-shadow-sm drop-shadow-black/30">
-            <a href="/auth/signup">Sign up</a>
-          </p>
-          <p class="cursor-pointer px-4 text-end text-nowrap drop-shadow-sm drop-shadow-black/30">
-            <a href="/auth/signin">Sign in</a>
-          </p>
-          <p class="hidden cursor-pointer px-4 text-end drop-shadow-sm drop-shadow-black/30">
+          <p
+            v-if="authStore.isLoggedIn"
+            class="cursor-pointer px-4 text-end drop-shadow-sm drop-shadow-black/30"
+          >
             Logout
           </p>
+          <div v-else class="flex">
+            <p class="cursor-pointer px-4 text-end text-nowrap drop-shadow-sm drop-shadow-black/30">
+              <a href="/auth/signup">Sign up</a>
+            </p>
+            <p class="cursor-pointer px-4 text-end text-nowrap drop-shadow-sm drop-shadow-black/30">
+              <a href="/auth/signin">Sign in</a>
+            </p>
+          </div>
         </li>
       </ul>
     </div>

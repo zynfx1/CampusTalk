@@ -76,9 +76,20 @@ export const signIn = async (req: Request, res: Response) => {
   }
 };
 
-export const userProfile = async (req: authRequest, res: Response) => {
+export const authProfile = async (req: authRequest, res: Response) => {
   const userId = req.userId;
   try {
-    res.status(200).json({ msg: `You are authorized`, res: userId });
-  } catch (error) {}
+    const result = await pool.query(
+      'SELECT * FROM user_table WHERE user_id = $1',
+      [userId],
+    );
+    const user = result.rows[0];
+
+    res.status(200).json({
+      msg: 'User profile fetched successfully',
+      res: { email: user.user_email },
+    });
+  } catch (error) {
+    res.status(500).json({ msg: 'Failed to fetch user profile' });
+  }
 };
