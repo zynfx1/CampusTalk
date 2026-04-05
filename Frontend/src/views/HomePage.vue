@@ -3,6 +3,10 @@ import { Heart, HomeIcon, Plus, Search, UserIcon } from 'lucide-vue-next';
 import { User2Icon } from 'lucide-vue-next';
 import { authFunction } from '../stores/authStore';
 const authStore = authFunction();
+
+const handleLogout = () => {
+  authStore.handleLogout();
+};
 </script>
 
 <template>
@@ -51,19 +55,26 @@ const authStore = authFunction();
       class="fixed top-0 right-0 hidden w-3/15 py-4 drop-shadow-lg drop-shadow-black/20 sm:block"
     >
       <ul class="flex h-full w-full">
-        <li class="flex w-full items-center justify-end gap-12">
-          <img
-            src="../assets/img/user.png"
-            alt=""
-            class="bg-amber-90 h-10 w-10 items-end drop-shadow-md drop-shadow-black/20"
-          />
+        <li class="flex w-full items-center justify-end gap-5">
+          <div class="flex items-center justify-center">
+            <img
+              src="../assets/img/user.png"
+              alt=""
+              class="bg-amber-90 h-10 w-10 items-end drop-shadow-md drop-shadow-black/20"
+            />
+            <p class="cursor-pointer px-4 text-end text-nowrap drop-shadow-sm drop-shadow-black/30">
+              user
+            </p>
+          </div>
+
           <p
             v-if="authStore.isLoggedIn"
+            @click="handleLogout()"
             class="cursor-pointer px-4 text-end drop-shadow-sm drop-shadow-black/30"
           >
             Logout
           </p>
-          <div v-else class="flex">
+          <div v-else class="flex ">
             <p class="cursor-pointer px-4 text-end text-nowrap drop-shadow-sm drop-shadow-black/30">
               <a href="/auth/signup">Sign up</a>
             </p>

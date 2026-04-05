@@ -6,6 +6,11 @@ import { authRequest } from '../middleware/authMiddleware';
 
 export const signUp = async (req: Request, res: Response) => {
   const { userName, userEmail, userPass } = req.body;
+  const jwtSecret = process.env.JWT_SECRET;
+
+  if (!jwtSecret) {
+    return res.status(401).json({ msg: 'Server error configuration' });
+  }
 
   try {
     const saltRounds = 10;
@@ -15,6 +20,23 @@ export const signUp = async (req: Request, res: Response) => {
       'INSERT INTO user_table ( user_name, user_email, user_pass) VALUES ($1,$2,$3) RETURNING user_id, user_name, user_email',
       [userName, userEmail, hashedPassword],
     );
+
+    const user = result.rows[0];
+
+    if (!user) {
+      return res.status(500).json({ msg: 'Failed to create user account' });
+    }
+
+    const token = jwt.sign({ userId: user.user_id }, jwtSecret, {
+      expiresIn: '1h',
+    });
+
+    res.cookie('auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 3600000,
+    });
 
     res
       .status(201)
@@ -91,5 +113,14 @@ export const authProfile = async (req: authRequest, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({ msg: 'Failed to fetch user profile' });
+  }
+};
+
+export const deleteToken = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie('auth_token');
+    res.status(200).json({ msg: 'Successfully logged out' });
+  } catch (error) {
+    res.status(500).json({ msg: 'Failed to log out' });
   }
 };

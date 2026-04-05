@@ -45,7 +45,26 @@ export const authFunction = defineStore('authFunc', () => {
     }
   };
 
-  return { isLoggedIn, checkAuthProfile, signUpUser, isLoading, isErrorModalVisible, signInUser };
+  const handleLogout = async () => {
+    try {
+      const response = await api.delete('/auth/logout');
+      console.log('successfully logged out', response.data);
+      user.value = null;
+    
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return {
+    handleLogout,
+    isLoggedIn,
+    checkAuthProfile,
+    signUpUser,
+    isLoading,
+    isErrorModalVisible,
+    signInUser,
+  };
 });
 
 export const errorWentWrongModal = defineStore('errorModal', () => {
