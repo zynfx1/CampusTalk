@@ -14,6 +14,7 @@ export const authFunction = defineStore('authFunc', () => {
     try {
       const response = await api.get('/user/profile');
       user.value = response.data.res;
+      await router.replace({ path: '/' });  
       console.log(response.data.res);
     } catch (error) {
       user.value = null;
@@ -78,3 +79,4 @@ export const errorWentWrongModal = defineStore('errorModal', () => {
 
   return { isErrorModalVisible, openErrorModal, closeErrorModal };
 });
+

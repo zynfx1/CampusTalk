@@ -2,6 +2,7 @@
 import { Heart, HomeIcon, Plus, Search, UserIcon } from 'lucide-vue-next';
 import { User2Icon } from 'lucide-vue-next';
 import { authFunction } from '../stores/authStore';
+import profileDropDown from '@/components/profileDropDown.vue';
 const authStore = authFunction();
 
 const handleLogout = () => {
@@ -44,6 +45,7 @@ const handleLogout = () => {
       </li>-->
     </ul>
   </div>
+
   <section
     class="bg-dark-khaki-300/55 font-poppins flex min-h-screen w-screen items-center justify-center text-white"
   >
@@ -51,39 +53,43 @@ const handleLogout = () => {
       <h1 class="text-2xl font-medium text-black/50">Feed</h1>
       <div class=""></div>
     </div>
-    <div
-      class="fixed top-0 right-0 hidden w-3/15 py-4 drop-shadow-lg drop-shadow-black/20 sm:block"
-    >
-      <ul class="flex h-full w-full">
-        <li class="flex w-full items-center justify-end gap-5">
-          <div class="flex items-center justify-center">
-            <img
-              src="../assets/img/user.png"
-              alt=""
-              class="bg-amber-90 h-10 w-10 items-end drop-shadow-md drop-shadow-black/20"
-            />
-            <p class="cursor-pointer px-4 text-end text-nowrap drop-shadow-sm drop-shadow-black/30">
-              user
-            </p>
-          </div>
+  </section>
 
-          <p
+  <div class="fixed top-0 right-0 mr-2 w-60 py-4">
+    <profileDropDown></profileDropDown>
+    <ul class="font-poppins flex h-full w-full text-white drop-shadow-lg drop-shadow-black/20">
+      <li class="fixed flex w-full items-center justify-end gap-2">
+        <div class="flex w-full items-center justify-start">
+          <img
+            src="../assets/img/user.png"
+            alt=""
+            class="bg-amber-90 h-10 w-10 items-end rounded-2xl p-0.5 drop-shadow-md drop-shadow-black/20 transition duration-150 ease-in-out hover:bg-gray-500/40"
+          />
+        </div>
+        <!--<p
             v-if="authStore.isLoggedIn"
             @click="handleLogout()"
-            class="cursor-pointer px-4 text-end drop-shadow-sm drop-shadow-black/30"
+            class="cursor-pointer text-end drop-shadow-sm drop-shadow-black/30"
           >
             Logout
+          </p>-->
+
+        <div
+          v-if="authStore.isLoggedIn === false"
+          class="mr-2 flex w-full items-center justify-end gap-3 underline-offset-3 lg:gap-5 xl:mr-5"
+        >
+          <p
+            class="cursor-pointer text-end text-nowrap drop-shadow-sm drop-shadow-black/30 hover:underline"
+          >
+            <a href="/auth/signup">Sign up</a>
           </p>
-          <div v-else class="flex ">
-            <p class="cursor-pointer px-4 text-end text-nowrap drop-shadow-sm drop-shadow-black/30">
-              <a href="/auth/signup">Sign up</a>
-            </p>
-            <p class="cursor-pointer px-4 text-end text-nowrap drop-shadow-sm drop-shadow-black/30">
-              <a href="/auth/signin">Sign in</a>
-            </p>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </section>
+          <p
+            class="cursor-pointer text-end text-nowrap drop-shadow-sm drop-shadow-black/30 hover:underline"
+          >
+            <a href="/auth/signin">Sign in</a>
+          </p>
+        </div>
+      </li>
+    </ul>
+  </div>
 </template>
