@@ -2,12 +2,12 @@
 import { Heart, HomeIcon, Plus, Search, UserIcon } from 'lucide-vue-next';
 import { User2Icon } from 'lucide-vue-next';
 import { authFunction } from '../stores/authStore';
+import { profileModalStore } from '../stores/modalStore';
 import profileDropDown from '@/components/profileDropDown.vue';
 const authStore = authFunction();
+const profileModal = profileModalStore();
 
-const handleLogout = () => {
-  authStore.handleLogout();
-};
+
 </script>
 
 <template>
@@ -56,11 +56,15 @@ const handleLogout = () => {
   </section>
 
   <div class="fixed top-0 right-0 mr-2 w-60 py-4">
-    <profileDropDown></profileDropDown>
+    <profileDropDown
+      @close="profileModal.closeProfileModal"
+      :showModal="profileModal.isProfileModalVisible"
+    ></profileDropDown>
     <ul class="font-poppins flex h-full w-full text-white drop-shadow-lg drop-shadow-black/20">
       <li class="fixed flex w-full items-center justify-end gap-2">
         <div class="flex w-full items-center justify-start">
           <img
+            @click="profileModal.openProfileModal"
             src="../assets/img/user.png"
             alt=""
             class="bg-amber-90 h-10 w-10 items-end rounded-2xl p-0.5 drop-shadow-md drop-shadow-black/20 transition duration-150 ease-in-out hover:bg-gray-500/40"
@@ -76,7 +80,7 @@ const handleLogout = () => {
 
         <div
           v-if="authStore.isLoggedIn === false"
-          class="mr-2 flex w-full items-center justify-end gap-3 underline-offset-3 lg:gap-5 xl:mr-5"
+          class=" mr-2 flex w-full items-center justify-end gap-3 underline-offset-3 lg:gap-5 xl:mr-5"
         >
           <p
             class="cursor-pointer text-end text-nowrap drop-shadow-sm drop-shadow-black/30 hover:underline"

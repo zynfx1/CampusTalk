@@ -5,7 +5,7 @@ export const profileModalStore = defineStore('profileModal', () => {
   const isProfileModalVisible = ref<boolean>(false);
 
   const openProfileModal = () => {
-    isProfileModalVisible.value = true;
+    isProfileModalVisible.value = !isProfileModalVisible.value;
   };
   const closeProfileModal = () => {
     isProfileModalVisible.value = false;
