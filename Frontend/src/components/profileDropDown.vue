@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { LogOut, LogOutIcon, User } from 'lucide-vue-next';
 import { authFunction } from '../stores/authStore';
+import { profileModalStore } from '../stores/modalStore';
 const authStore = authFunction();
+const profileModal = profileModalStore();
 
 const handleLogout = () => {
   authStore.handleLogout();
+  profileModal.closeProfileModal();
 };
 defineProps<{
   showModal: boolean;
@@ -12,7 +15,7 @@ defineProps<{
 </script>
 
 <template to="body">
-  <div @click.self="$emit('close')" class="fixed inset-0 bg-black/0">
+  <div @click.self="$emit('close')" class="fixed inset-x-20 inset-y-0 bg-black/0">
     <div
       v-if="showModal"
       class="bg-custom-gray font-poppins fixed top-15 right-0 mr-2 flex h-30 w-60 items-center justify-center rounded-2xl border border-white/40 text-white"
