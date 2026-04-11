@@ -2,15 +2,19 @@
 import { Heart, HomeIcon, Plus, Search, UserIcon } from 'lucide-vue-next';
 import { User2Icon } from 'lucide-vue-next';
 import { authFunction } from '../stores/authStore';
-import { profileModalStore } from '../stores/modalStore';
+import { profileModalStore, confirmModalStore } from '../stores/modalStore';
 import profileDropDown from '@/components/profileDropDown.vue';
 import ConfirmModal from '@/components/confirmModal.vue';
 const authStore = authFunction();
 const profileModal = profileModalStore();
+const confirmModal = confirmModalStore();
 </script>
 
 <template>
-  <ConfirmModal></ConfirmModal>
+  <ConfirmModal
+    @close="confirmModal.closeConfirmModal"
+    :showModal="confirmModal.isConfirmModalVisible"
+  ></ConfirmModal>
   <div
     class="font-poppins bg-dark-khaki-500 sm:bg-dark-khaki-300/0 text-dark-khaki-300/0 text-opacity-0 fixed bottom-0 z-50 flex h-20 w-full flex-row items-center justify-center duration-200 ease-in-out hover:w-60 hover:text-white hover:opacity-100 sm:h-full sm:w-50 sm:flex-col"
   >

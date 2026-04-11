@@ -2,6 +2,7 @@
 import somethingWentWrong from '../components/somethingWentWrong.vue';
 import { computed, ref } from 'vue';
 import type { userTypes } from '@/types/user';
+import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
 import { authFunction, errorWentWrongModal } from '@/stores/authStore';
 const newUserName = ref('');
 const newUserEmail = ref('');
@@ -66,12 +67,17 @@ const buttonDisabled = computed(() => ['disabled:opacity-50', 'disabled:cursor-n
             v-model="newUserPass"
             required
           />
+
           <button
             :disabled="authStore.isLoading"
             :class="buttonDisabled"
             @click="signUpUser"
-            class="bg-jungle-green-900 h-15 w-full cursor-pointer rounded-xl border-2 border-white/10 text-white"
+            class="bg-jungle-green-900 flex h-15 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-white/10 text-white"
           >
+         
+            <video v-if="authStore.isLoading" loop autoplay class="h-15 w-15 bg-amber-200">
+              <source src="../assets/animated icons/Trail loading.webm" />
+            </video>
             {{ authStore.isLoading ? 'Loading' : 'Sign Up' }}
           </button>
           <p class="mb-5 h-full w-full text-center text-sm text-black/60" href="#">
