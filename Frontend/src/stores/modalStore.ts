@@ -13,3 +13,17 @@ export const profileModalStore = defineStore('profileModal', () => {
 
   return { isProfileModalVisible, openProfileModal, closeProfileModal };
 });
+
+export const confirmModalStore = defineStore('confirmModal', () => {
+  const isConfirmModalVisible = ref<boolean>(false);
+
+  const openConfirmModal = () => {
+    isConfirmModalVisible.value = true;
+  };
+
+  const closeConfirmModal = () => {
+    isConfirmModalVisible.value = false;
+  };
+
+  return { isConfirmModalVisible, openConfirmModal, closeConfirmModal };
+});

@@ -14,7 +14,7 @@ export const authFunction = defineStore('authFunc', () => {
     try {
       const response = await api.get('/user/profile');
       user.value = response.data.res;
-      await router.replace({ path: '/' });  
+      await router.replace({ path: '/' });
       console.log(response.data.res);
     } catch (error) {
       user.value = null;
@@ -48,12 +48,14 @@ export const authFunction = defineStore('authFunc', () => {
 
   const handleLogout = async () => {
     try {
+      isLoading.value = true;
       const response = await api.delete('/auth/logout');
       console.log('successfully logged out', response.data);
       user.value = null;
-    
     } catch (error) {
       console.log(error);
+    } finally {
+      isLoading.value = false;
     }
   };
 
@@ -79,4 +81,3 @@ export const errorWentWrongModal = defineStore('errorModal', () => {
 
   return { isErrorModalVisible, openErrorModal, closeErrorModal };
 });
-

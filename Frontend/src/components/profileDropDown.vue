@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { LogOut, LogOutIcon, User } from 'lucide-vue-next';
 import { authFunction } from '../stores/authStore';
-import { profileModalStore } from '../stores/modalStore';
+import { profileModalStore, confirmModalStore } from '../stores/modalStore';
 const authStore = authFunction();
 const profileModal = profileModalStore();
+const confirmModal = confirmModalStore();
 
 const handleLogout = () => {
-  authStore.handleLogout();
+  confirmModal.openConfirmModal();
   profileModal.closeProfileModal();
 };
 defineProps<{
@@ -23,14 +24,14 @@ defineProps<{
       <ul class="flex h-full w-full items-center justify-center">
         <li class="flex h-full w-full flex-col p-2">
           <div
-            class="flex h-full items-center justify-start gap-4 rounded-lg transition duration-50 ease-in-out hover:bg-gray-400"
+            class="flex h-full cursor-pointer items-center justify-start gap-4 rounded-lg transition duration-50 ease-in-out hover:bg-gray-400"
           >
             <User class="ml-2"></User>
             <p>View profile</p>
           </div>
           <div
             @click="handleLogout"
-            class="flex h-full items-center justify-start gap-4 rounded-lg transition duration-50 ease-in-out hover:bg-gray-400"
+            class="flex h-full cursor-pointer items-center justify-start gap-4 rounded-lg transition duration-50 ease-in-out hover:bg-gray-400"
           >
             <LogOutIcon class="ml-2"></LogOutIcon>
             <p>Log out</p>
