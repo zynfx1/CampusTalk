@@ -4,6 +4,7 @@ import api from '@/api/router';
 import { computed, ref } from 'vue';
 import router from '@/router';
 
+
 const isErrorModalVisible = ref<boolean>(false);
 export const authFunction = defineStore('authFunc', () => {
   const user = ref<userTypes | null>(null);
@@ -24,7 +25,10 @@ export const authFunction = defineStore('authFunc', () => {
   const signUpUser = async (users: userTypes) => {
     try {
       isLoading.value = true;
-      const response = await api.post('/auth/sign-up', users);
+      const [response] = await Promise.all([
+        api.post('/auth/sign-up', users),
+        new Promise((resolve) => setTimeout(resolve, 5000)),
+      ]);
       user.value = response.data.res;
       console.log(response.data.res);
       await router.replace({ path: '/' });
@@ -37,12 +41,18 @@ export const authFunction = defineStore('authFunc', () => {
 
   const signInUser = async (users: userTypes) => {
     try {
-      const response = await api.post('/auth/sign-in', users);
+      isLoading.value = true;
+      const [response] = await Promise.all([
+        api.post('/auth/sign-in', users),
+        new Promise((resolve) => setTimeout(resolve, 2000)),
+      ]);
       user.value = response.data.user;
       console.log(response.data.user.email);
       await router.replace({ path: '/' });
     } catch (error) {
       console.log(error);
+    } finally {
+      isLoading.value = false;
     }
   };
 
@@ -80,4 +90,9 @@ export const errorWentWrongModal = defineStore('errorModal', () => {
   };
 
   return { isErrorModalVisible, openErrorModal, closeErrorModal };
+});
+
+export const componentStore = defineStore('componentStore', () => {
+  const buttonDisabled = computed(() => ['disabled:opacity-50', 'disabled:cursor-not-allowed']);
+  return { buttonDisabled };
 });
