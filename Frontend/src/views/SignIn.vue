@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { userTypes } from '../types/user';
-import { authFunction } from '../stores/authStore';
+import { authFunction, componentStore } from '../stores/authStore';
 
+const compStore = componentStore();
 const auth = authFunction();
 const currentUserEmail = ref('');
 const currentUserPass = ref('');
@@ -49,11 +50,15 @@ const signInUser = () => {
             v-model="currentUserPass"
           />
           <button
-            type="button"
+            :disabled="auth.isLoading"
+            :class="compStore.buttonDisabled"
             @click="signInUser"
-            class="bg-jungle-green-900 h-15 w-full cursor-pointer rounded-xl border-2 border-white/10 text-white"
+            class="bg-jungle-green-900 flex h-15 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-white/10 text-white"
           >
-            Sign In
+            <video v-if="auth.isLoading" loop autoplay class="h-35 w-35">
+              <source src="../assets/animated icons/loading2.webm" />
+            </video>
+            {{ auth.isLoading ? '' : 'Sign in' }}
           </button>
           <a class="text-jungle-green-800 h-full w-full text-center text-sm" href="#"
             >Forgot Password?</a
@@ -64,6 +69,7 @@ const signInUser = () => {
             <div class="h-px flex-1 bg-black/20"></div>
           </div>
           <button
+            :disabled="auth.isLoading"
             class="border-jungle-green-600 text-jungle-green-900 h-15 w-full cursor-pointer rounded-xl border-2"
           >
             Continue with google

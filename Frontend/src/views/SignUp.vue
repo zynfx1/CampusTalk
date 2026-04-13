@@ -3,11 +3,12 @@ import somethingWentWrong from '../components/somethingWentWrong.vue';
 import { computed, ref } from 'vue';
 import type { userTypes } from '@/types/user';
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
-import { authFunction, errorWentWrongModal } from '@/stores/authStore';
+import { authFunction, errorWentWrongModal, componentStore } from '@/stores/authStore';
 const newUserName = ref('');
 const newUserEmail = ref('');
 const newUserPass = ref('');
 
+const compStore = componentStore();
 const authStore = authFunction();
 const errorModal = errorWentWrongModal();
 
@@ -27,8 +28,6 @@ const signUpUser = () => {
   newUserPass.value = '';
   authStore.signUpUser(user);
 };
-
-const buttonDisabled = computed(() => ['disabled:opacity-50', 'disabled:cursor-not-allowed']);
 </script>
 
 <template>
@@ -70,15 +69,14 @@ const buttonDisabled = computed(() => ['disabled:opacity-50', 'disabled:cursor-n
 
           <button
             :disabled="authStore.isLoading"
-            :class="buttonDisabled"
+            :class="compStore.buttonDisabled"
             @click="signUpUser"
             class="bg-jungle-green-900 flex h-15 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-white/10 text-white"
           >
-         
-            <video v-if="authStore.isLoading" loop autoplay class="h-15 w-15 bg-amber-200">
-              <source src="../assets/animated icons/Trail loading.webm" />
+            <video v-if="authStore.isLoading" loop autoplay class="h-35 w-35">
+              <source src="../assets/animated icons/loading2.webm" />
             </video>
-            {{ authStore.isLoading ? 'Loading' : 'Sign Up' }}
+            {{ authStore.isLoading ? '' : 'Sign up' }}
           </button>
           <p class="mb-5 h-full w-full text-center text-sm text-black/60" href="#">
             Already have an account?
