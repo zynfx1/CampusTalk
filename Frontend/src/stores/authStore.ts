@@ -4,7 +4,6 @@ import api from '@/api/router';
 import { computed, ref } from 'vue';
 import router from '@/router';
 
-
 const isErrorModalVisible = ref<boolean>(false);
 export const authFunction = defineStore('authFunc', () => {
   const user = ref<userTypes | null>(null);
@@ -32,6 +31,7 @@ export const authFunction = defineStore('authFunc', () => {
       user.value = response.data.res;
       console.log(response.data.res);
       await router.replace({ path: '/' });
+      window.location.reload();
     } catch (error) {
       isErrorModalVisible.value = true;
     } finally {
@@ -49,6 +49,7 @@ export const authFunction = defineStore('authFunc', () => {
       user.value = response.data.user;
       console.log(response.data.user.email);
       await router.replace({ path: '/' });
+      window.location.reload();
     } catch (error) {
       console.log(error);
     } finally {
