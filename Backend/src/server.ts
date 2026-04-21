@@ -3,6 +3,7 @@ import cors from 'cors';
 import authRouter from './routes/authRoutes';
 import usersRouter from './routes/usersRoutes';
 import cookieParser from 'cookie-parser';
+import { doubleCsrfProtection } from './middleware/securityMiddleware';
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
+app.use(doubleCsrfProtection);
 app.use('/api/auth', authRouter);
 app.use('/api/user', usersRouter);
 const PORT = 3000;
