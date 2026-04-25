@@ -4,6 +4,7 @@ import Homepage from '@/views/HomePage.vue';
 import SignIn from '@/views/SignIn.vue';
 import SignUp from '@/views/SignUp.vue';
 import NotFound from '@/views/NotFound.vue';
+import verifySignUp from '@/views/verifySignUp.vue';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -11,6 +12,7 @@ const routes: RouteRecordRaw[] = [
     component: Homepage,
   },
   { path: '/auth/signin', component: SignIn },
+  { path: '/auth/signup/otp', component: verifySignUp },
   { path: '/auth/signup', component: SignUp },
   { path: '/:pathMatch(.*)*', component: NotFound },
 ];
