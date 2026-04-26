@@ -101,8 +101,8 @@ export const signIn = async (req: Request, res: Response) => {
 
 export const authProfile = async (req: authRequest, res: Response) => {
   const userId = req.userId;
-  const csrfToken = generateCsrfToken(req, res);
-  console.log(csrfToken);
+  //const csrfToken = generateCsrfToken(req, res);
+  //console.log(csrfToken);
   try {
     const result = await pool.query(
       'SELECT * FROM user_table WHERE user_id = $1',
@@ -110,7 +110,7 @@ export const authProfile = async (req: authRequest, res: Response) => {
     );
     const user = result.rows[0];
 
-    res.json({ msg: 'Successfully logged in', csrfToken: csrfToken });
+    //res.json({ msg: 'Successfully logged in', csrfToken: csrfToken });
     res.status(200).json({
       msg: 'User profile fetched successfully',
       res: { email: user.user_email },

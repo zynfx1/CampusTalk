@@ -24,13 +24,14 @@ export const authFunction = defineStore('authFunc', () => {
   const signUpUser = async (users: userTypes) => {
     try {
       isLoading.value = true;
+      await router.replace({ path: '/auth/signup/otp' });
       const [response] = await Promise.all([
         api.post('/auth/sign-up', users),
         new Promise((resolve) => setTimeout(resolve, 5000)),
       ]);
       user.value = response.data.res;
       console.log(response.data.res);
-      await router.replace({ path: '/' });
+
       window.location.reload();
     } catch (error) {
       isErrorModalVisible.value = true;
