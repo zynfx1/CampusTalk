@@ -13,11 +13,11 @@ const otpValue = ref('');
         <img
           src="../assets/img/emailGray.png"
           alt=""
-          class="w-3/14 rounded-4xl bg-gray-500/20 p-6 opacity-80"
+          class="w-3/10 sm:w-3/14  rounded-4xl bg-gray-500/20 p-6 opacity-80"
         />
         <p class="px-5 text-center text-xl font-semibold text-gray-800/90">Verify Your Email</p>
         <p class="text-md px-5 text-center text-gray-800/50">
-          We have sent a 6 digit verification code to dummy.acc@gmail.com
+          We have sent a 4 digit verification code to dummy.acc@gmail.com
         </p>
       </div>
       <div class="flex w-full items-center justify-center px-4 sm:px-8">
@@ -29,10 +29,15 @@ const otpValue = ref('');
               inputmode="numeric"
               autocomplete="one-time-code"
               maxlength="4"
-              class="z-50 h-full w-full cursor-default"
+              class="z-50 h-full w-full cursor-default opacity-0"
             />
             <div class="absolute flex h-15 w-full justify-center gap-4 px-4 md:gap-8 md:px-2">
-              <div v-for="i in 4" :key="i" class="h-ull w-15 rounded-t-md bg-gray-500/40 text-center flex items-center justify-center text-3xl">
+              <div
+                v-for="i in 4"
+                :key="i"
+                :class="otpValue.length === i - 1 ? 'border-b-sky-600' : 'border-b-gray-500'"
+                class="h-ull flex w-15 items-center justify-center rounded-t-md border-b-2 bg-gray-500/40 text-center text-3xl"
+              >
                 {{ otpValue[i - 1] }}
               </div>
             </div>

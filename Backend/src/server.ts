@@ -15,7 +15,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
-app.use(doubleCsrfProtection);
+
 app.use('/api/auth', authRouter);
 app.use('/api/user', usersRouter);
 const PORT = 3000;
