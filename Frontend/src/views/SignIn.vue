@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { userTypes } from '../types/user';
-import { authFunction, componentStore } from '../stores/authStore';
+import { authFunction } from '../stores/authStore';
 
-const compStore = componentStore();
 const auth = authFunction();
 const currentUserEmail = ref('');
 const currentUserPass = ref('');
@@ -51,7 +50,7 @@ const signInUser = () => {
           />
           <button
             :disabled="auth.isLoading"
-            :class="compStore.buttonDisabled"
+            :class="auth.buttonDisabled"
             @click="signInUser"
             class="bg-jungle-green-900 flex h-15 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-white/10 text-white"
           >

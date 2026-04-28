@@ -3,7 +3,10 @@ import pool from '../config/db';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { authRequest } from '../middleware/authMiddleware';
-import { generateCsrfToken } from '../middleware/securityMiddleware';
+import {
+  generateCsrfToken,
+  invalidCsrfTokenError,
+} from '../middleware/securityMiddleware';
 
 export const signUp = async (req: Request, res: Response) => {
   const { userName, userEmail, userPass } = req.body;
@@ -99,10 +102,22 @@ export const signIn = async (req: Request, res: Response) => {
   }
 };
 
+export const csrfVerification = async (req: Request, res: Response) => {
+  const csrfToken = generateCsrfToken(req, res);
+
+  try {
+    res
+      .status(200)
+      .json({ msg: 'CSRF Token generated successfully', csrfToken: csrfToken });
+  } catch (error) {
+    invalidCsrfTokenError;
+    res.status(500).json({ msg: 'Failed to generate CSRF Token' });
+  }
+};
+
 export const authProfile = async (req: authRequest, res: Response) => {
   const userId = req.userId;
-  //const csrfToken = generateCsrfToken(req, res);
-  //console.log(csrfToken);
+
   try {
     const result = await pool.query(
       'SELECT * FROM user_table WHERE user_id = $1',
@@ -110,7 +125,6 @@ export const authProfile = async (req: authRequest, res: Response) => {
     );
     const user = result.rows[0];
 
-    //res.json({ msg: 'Successfully logged in', csrfToken: csrfToken });
     res.status(200).json({
       msg: 'User profile fetched successfully',
       res: { email: user.user_email },
