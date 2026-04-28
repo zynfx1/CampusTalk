@@ -3,14 +3,12 @@ import somethingWentWrong from '../components/somethingWentWrong.vue';
 import { computed, ref } from 'vue';
 import type { userTypes } from '@/types/user';
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
-import { authFunction, errorWentWrongModal, componentStore } from '@/stores/authStore';
+import { authFunction } from '@/stores/authStore';
 const newUserName = ref('');
 const newUserEmail = ref('');
 const newUserPass = ref('');
 
-const compStore = componentStore();
 const authStore = authFunction();
-const errorModal = errorWentWrongModal();
 
 const signUpUser = () => {
   if (newUserName.value === '' || newUserEmail.value === '' || newUserPass.value === '') {
@@ -26,14 +24,15 @@ const signUpUser = () => {
   newUserName.value = '';
   newUserEmail.value = '';
   newUserPass.value = '';
+  authStore.user = user;
   authStore.signUpUser(user);
 };
 </script>
 
 <template>
   <somethingWentWrong
-    @close="errorModal.closeErrorModal"
-    :showModal="errorModal.isErrorModalVisible"
+    @close="authStore.closeErrorModal"
+    :showModal="authStore.isErrorModalVisible"
   ></somethingWentWrong>
   <section class="bg-dark-khaki-300/70 flex min-h-dvh w-full items-center justify-center">
     <div
@@ -69,7 +68,7 @@ const signUpUser = () => {
 
           <button
             :disabled="authStore.isLoading"
-            :class="compStore.buttonDisabled"
+            :class="authStore.buttonDisabled"
             @click="signUpUser"
             class="bg-jungle-green-900 flex h-15 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-white/10 text-white"
           >

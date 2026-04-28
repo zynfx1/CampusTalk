@@ -2,6 +2,7 @@ import {
   signUp,
   signIn,
   authProfile,
+  csrfVerification,
   deleteToken,
 } from '../controllers/authController';
 import { verifyToken } from '../middleware/authMiddleware';
@@ -12,5 +13,6 @@ const authRouter = Router();
 authRouter.post('/sign-up', signUp);
 authRouter.post('/sign-in', signIn);
 authRouter.delete('/logout', deleteToken);
+authRouter.get('/csrf-token', csrfVerification);
 
 export default authRouter;
