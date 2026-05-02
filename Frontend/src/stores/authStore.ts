@@ -11,6 +11,9 @@ export const authFunction = defineStore(
     const isLoading = ref<boolean>(false);
     const isLoggedIn = computed(() => !!user.value);
     const isErrorModalVisible = ref<boolean>(false);
+    const userNameError = ref<boolean>(false);
+    const userEmailError = ref<boolean>(false);
+    const invalidEmailError = ref<boolean>(false);
 
     const checkAuthProfile = async () => {
       try {
@@ -31,19 +34,56 @@ export const authFunction = defineStore(
       }
     };
 
+    const requestOtp = async (user: userTypes) => {
+      try {
+        isLoading.value = true;
+        const response = await api.post('/auth/send-otp', {
+          userName: user.userName,
+          userEmail: user.userEmail,
+        });
+        await router.replace({ path: '/auth/signup/otp' });
+        console.log('OTP sent successfully', response.data);
+      } catch (error: any) {
+        const errorType = error.response.data.msg;
+
+        if (errorType === 'USERNAME_TAKEN') {
+          userNameError.value = true;
+          setTimeout(() => {
+            userNameError.value = false;
+          }, 2000);
+        } else if (errorType === 'EMAIL_TAKEN') {
+          userEmailError.value = true;
+          setTimeout(() => {
+            userEmailError.value = false;
+          }, 2000);
+        } else if (errorType === 'INVALID_EMAIL') {
+          invalidEmailError.value = true;
+          setTimeout(() => {
+            invalidEmailError.value = false;
+          }, 2000);
+        }
+        console.log(error);
+      } finally {
+        isLoading.value = false;
+      }
+    };
+
     const signUpUser = async (users: userTypes) => {
       try {
         isLoading.value = true;
-        await router.replace({ path: '/auth/signup/otp' });
         const [response] = await Promise.all([
-          //api.post('/auth/sign-up', users),
+          api.post('/auth/sign-up', users),
           new Promise((resolve) => setTimeout(resolve, 5000)),
         ]);
-        //user.value = response.data.res;
-        //console.log(response.data.res);
+        await router.replace({ path: '/auth/signup/otp' });
+
+        user.value = response.data.res;
+
         //window.location.reload();
       } catch (error) {
+        console.log(error);
         isErrorModalVisible.value = true;
+        return;
       } finally {
         isLoading.value = false;
       }
@@ -104,6 +144,10 @@ export const authFunction = defineStore(
       openErrorModal,
       buttonDisabled,
       closeErrorModal,
+      requestOtp,
+      userNameError,
+      userEmailError,
+      invalidEmailError,
     };
   },
   {
