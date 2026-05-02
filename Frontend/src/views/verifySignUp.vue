@@ -21,7 +21,7 @@ const otpValue = ref('');
         <p class="px-5 text-center text-xl font-semibold text-gray-800/90">Verify Your Email</p>
         <p class="text-md px-5 text-center text-gray-800/50">
           We have sent a 6 digit verification code to
-          {{ authStore.user?.userEmail }}
+          {{ authStore.user?.userEmail || 'your email address' }}
         </p>
       </div>
       <div class="flex w-full items-center justify-center px-4 sm:px-8">

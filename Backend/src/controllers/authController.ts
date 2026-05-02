@@ -7,6 +7,9 @@ import {
   generateCsrfToken,
   invalidCsrfTokenError,
 } from '../middleware/securityMiddleware';
+import nodemailer from 'nodemailer';
+import crypto from 'node:crypto';
+import { otpTemplate } from '../templates/emailTemplates';
 
 export const signUp = async (req: Request, res: Response) => {
   const { userName, userEmail, userPass } = req.body;
@@ -42,9 +45,7 @@ export const signUp = async (req: Request, res: Response) => {
       maxAge: 3600000,
     });
 
-    res
-      .status(201)
-      .json({ msg: 'Successfully created user', res: result.rows });
+    res.status(201).json({ msg: 'Successfully created user', res: user });
   } catch (error) {
     console.log(error);
     res
@@ -140,5 +141,65 @@ export const deleteToken = async (req: Request, res: Response) => {
     res.status(200).json({ msg: 'Successfully logged out' });
   } catch (error) {
     res.status(500).json({ msg: 'Failed to log out' });
+  }
+};
+
+export const sendOtp = async (req: Request, res: Response) => {
+  const { userName, userEmail } = req.body;
+
+  try {
+    const userNameExists = await pool.query(
+      'SELECT * FROM user_table WHERE user_name = $1',
+      [userName],
+    );
+
+    const userEmailExists = await pool.query(
+      'SELECT * FROM user_table WHERE user_email = $1',
+      [userEmail],
+    );
+
+    const user = userEmailExists.rows[0];
+
+    if (userNameExists.rows.length > 0) {
+      console.log('USERNAME_TAKEN');
+      return res.status(400).json({ msg: 'USERNAME_TAKEN' });
+    }
+
+    if (userEmailExists.rows.length > 0) {
+      console.log('EMAIL_TAKEN');
+      return res.status(400).json({ msg: 'EMAIL_TAKEN' });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_APP_PASS,
+      },
+    });
+
+    const otp = crypto.randomInt(100000, 999999).toString();
+    const expires_at = new Date(Date.now() + 5 * 60000);
+
+    await pool.query('DELETE FROM otp_table WHERE user_email = $1', [
+      userEmail,
+    ]);
+    await pool.query(
+      'INSERT INTO otp_table (user_email, otp_code, expires_at) VALUES ($1, $2, $3)',
+      [userEmail, otp, expires_at],
+    );
+
+    await transporter.sendMail({
+      from: `"CampusTalk" <${process.env.EMAIL_USER}>`,
+      to: userEmail,
+      subject: 'Your CampusTalk Verification Code',
+      html: otpTemplate(otp, userName),
+    });
+
+    console.log(`OTP send successfully to ${userEmail}: ${otp}`);
+    res.status(200).json({ msg: 'OTP send successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: 'Failed to send OTP' });
   }
 };

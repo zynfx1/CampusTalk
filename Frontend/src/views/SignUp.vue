@@ -25,7 +25,7 @@ const signUpUser = () => {
   newUserEmail.value = '';
   newUserPass.value = '';
   authStore.user = user;
-  authStore.signUpUser(user);
+  authStore.requestOtp(user);
 };
 </script>
 
@@ -47,17 +47,25 @@ const signUpUser = () => {
           <input
             class="focus:border-jungle-green-900 bg-user h-15 w-full rounded-xl border-2 border-black/10 bg-size-[auto_25px] bg-position-[left_10px_center] bg-no-repeat px-12 shadow-lg shadow-black/15 focus:outline-none"
             type="text"
+            maxlength="10"
+            pattern="[a-zA-Z0-9]+"
+            title="Only letters and numbers are allowed. No spaces."
             placeholder="Username"
             required
             v-model="newUserName"
           />
+          <p v-if="authStore.userNameError" class="ml-2 text-red-500">Username already exist</p>
           <input
             class="focus:border-jungle-green-900 bg-email h-15 w-full rounded-xl border-2 border-black/10 bg-size-[auto_25px] bg-position-[left_10px_center] bg-no-repeat px-12 shadow-lg shadow-black/15 focus:outline-none"
-            type="text"
+            type="email"
             placeholder="Email"
             v-model="newUserEmail"
             required
           />
+          <p v-if="authStore.userEmailError" class="ml-2 text-red-500">User email already exist</p>
+          <p v-if="authStore.invalidEmailError" class="ml-2 text-red-500">
+            Invalid email. Please enter a valid email address.
+          </p>
           <input
             class="focus:border-jungle-green-900 bg-password h-15 w-full rounded-xl border-2 border-black/10 bg-size-[auto_25px] bg-position-[left_10px_center] bg-no-repeat px-12 shadow-lg shadow-black/15 focus:outline-none"
             type="text"
