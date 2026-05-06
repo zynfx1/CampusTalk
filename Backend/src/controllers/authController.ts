@@ -12,6 +12,8 @@ import nodemailer from 'nodemailer';
 import crypto from 'node:crypto';
 import validator from 'validator';
 import disposableEmail from 'disposable-email-domains';
+import dns from 'dns';
+import { promisify } from 'node:util';
 
 export const signUp = async (req: Request, res: Response) => {
   const { userName, userEmail, userPass } = req.body;
@@ -148,18 +150,38 @@ export const deleteToken = async (req: Request, res: Response) => {
 
 export const sendOtp = async (req: Request, res: Response) => {
   const { userName, userEmail } = req.body;
+  const resolveMx = promisify(dns.resolveMx);
 
   if (!userEmail || !validator.isEmail(userEmail)) {
     return res.status(400).json({ msg: 'INVALID_EMAIL' });
   }
 
-  const blackListedDomains = [
-    'mailinator.com',
-    '10minutemail.com',
-    'guerrillamail.com',
+  const allowedDomains = [
+    //Big Four
+    'gmail.com',
+    'googlemail.com',
+    'hotmail.com',
+    'outlook.com',
+    'live.com',
+    'msn.com',
+    'yahoo.com',
+    'ymail.com',
+    'icloud.com',
+    'me.com',
+    'appleid.com',
+    //Professional & Privacy Providers
+    'proton.me',
+    'protonmail.com',
+    'zoho.com',
+    'aol.com',
+    'gmx.com',
+    'mail.com',
+    //Edu
+    'yourcollege.edu',
   ];
   const domain = userEmail.split('@')[1];
-  if (blackListedDomains.includes(domain)) {
+
+  if (!allowedDomains.includes(domain) || disposableEmail.includes(domain)) {
     return res.status(400).json({ msg: 'INVALID_EMAIL' });
   }
   try {
@@ -181,6 +203,11 @@ export const sendOtp = async (req: Request, res: Response) => {
     if (userEmailExists.rows.length > 0) {
       console.log('EMAIL_TAKEN');
       return res.status(400).json({ msg: 'EMAIL_TAKEN' });
+    }
+
+    const mxRecords = await resolveMx(domain);
+    if (mxRecords.length === 0) {
+      return res.status(400).json({ msg: 'INVALID_EMAIL' });
     }
 
     const transporter = nodemailer.createTransport({
