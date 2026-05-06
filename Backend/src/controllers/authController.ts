@@ -3,13 +3,15 @@ import pool from '../config/db';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { authRequest } from '../middleware/authMiddleware';
+import { otpTemplate } from '../templates/emailTemplates';
 import {
   generateCsrfToken,
   invalidCsrfTokenError,
 } from '../middleware/securityMiddleware';
 import nodemailer from 'nodemailer';
 import crypto from 'node:crypto';
-import { otpTemplate } from '../templates/emailTemplates';
+import validator from 'validator';
+import disposableEmail from 'disposable-email-domains';
 
 export const signUp = async (req: Request, res: Response) => {
   const { userName, userEmail, userPass } = req.body;
@@ -147,6 +149,19 @@ export const deleteToken = async (req: Request, res: Response) => {
 export const sendOtp = async (req: Request, res: Response) => {
   const { userName, userEmail } = req.body;
 
+  if (!userEmail || !validator.isEmail(userEmail)) {
+    return res.status(400).json({ msg: 'INVALID_EMAIL' });
+  }
+
+  const blackListedDomains = [
+    'mailinator.com',
+    '10minutemail.com',
+    'guerrillamail.com',
+  ];
+  const domain = userEmail.split('@')[1];
+  if (blackListedDomains.includes(domain)) {
+    return res.status(400).json({ msg: 'INVALID_EMAIL' });
+  }
   try {
     const userNameExists = await pool.query(
       'SELECT * FROM user_table WHERE user_name = $1',
@@ -157,8 +172,6 @@ export const sendOtp = async (req: Request, res: Response) => {
       'SELECT * FROM user_table WHERE user_email = $1',
       [userEmail],
     );
-
-    const user = userEmailExists.rows[0];
 
     if (userNameExists.rows.length > 0) {
       console.log('USERNAME_TAKEN');
@@ -185,7 +198,7 @@ export const sendOtp = async (req: Request, res: Response) => {
       userEmail,
     ]);
     await pool.query(
-      'INSERT INTO otp_table (user_email, otp_code, expires_at) VALUES ($1, $2, $3)',
+      'INSERT INTO otp_table (user_email, otp_code, expires_at) VALUES ($1, $2, $3) RETURNING user_email',
       [userEmail, otp, expires_at],
     );
 
@@ -197,7 +210,7 @@ export const sendOtp = async (req: Request, res: Response) => {
     });
 
     console.log(`OTP send successfully to ${userEmail}: ${otp}`);
-    res.status(200).json({ msg: 'OTP send successfully' });
+    res.status(200).json({ msg: 'OTP send successfully', email: userEmail });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: 'Failed to send OTP' });

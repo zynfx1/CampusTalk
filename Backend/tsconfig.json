@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
+    //"baseUrl": ".",
     "noImplicitAny": true,
     "sourceMap": true
   },
