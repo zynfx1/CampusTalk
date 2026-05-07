@@ -73,16 +73,16 @@ export const authFunction = defineStore(
         isLoading.value = true;
         const [response] = await Promise.all([
           api.post('/auth/sign-up', users),
-          new Promise((resolve) => setTimeout(resolve, 5000)),
+          new Promise((resolve) => setTimeout(resolve, 2000)),
         ]);
-        await router.replace({ path: '/auth/signup/otp' });
+        await router.replace({ path: '/' });
 
         user.value = response.data.res;
-
-        //window.location.reload();
+        csrfVerification();
+        console.log('User signed up successfully', response.data.res);
       } catch (error) {
         console.log(error);
-        isErrorModalVisible.value = true;
+        //isErrorModalVisible.value = true;
         return;
       } finally {
         isLoading.value = false;
@@ -99,7 +99,6 @@ export const authFunction = defineStore(
         user.value = response.data.user;
         console.log(response.data.user.email);
         await router.replace({ path: '/' });
-        window.location.reload();
         csrfVerification();
       } catch (error) {
         console.log(error);

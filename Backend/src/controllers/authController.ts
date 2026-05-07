@@ -16,7 +16,7 @@ import dns from 'dns';
 import { promisify } from 'node:util';
 
 export const signUp = async (req: Request, res: Response) => {
-  const { userName, userEmail, userPass } = req.body;
+  const { userName, userEmail, userPass, otpCode } = req.body;
   const jwtSecret = process.env.JWT_SECRET;
 
   if (!jwtSecret) {
@@ -24,6 +24,15 @@ export const signUp = async (req: Request, res: Response) => {
   }
 
   try {
+    const otpResult = await pool.query(
+      'SELECT * FROM otp_table WHERE user_email = $1 AND otp_code = $2 AND expires_at > NOW()',
+      [userEmail, otpCode],
+    );
+
+    if (otpResult.rows.length === 0) {
+      return res.status(400).json({ msg: 'Invalid OTP code' });
+    }
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(userPass, saltRounds);
 
@@ -48,6 +57,10 @@ export const signUp = async (req: Request, res: Response) => {
       sameSite: 'strict',
       maxAge: 3600000,
     });
+
+    await pool.query('DELETE FROM otp_table WHERE user_email = $1', [
+      userEmail,
+    ]);
 
     res.status(201).json({ msg: 'Successfully created user', res: user });
   } catch (error) {

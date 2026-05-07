@@ -3,4 +3,5 @@ export interface userTypes {
   userName: string;
   userEmail: string;
   userPass: string;
+  otpCode?: string;
 }

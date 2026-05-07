@@ -1,9 +1,24 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { authFunction } from '../stores/authStore';
+import type { userTypes } from '../types/user';
 
 const authStore = authFunction();
 const otpValue = ref('');
+const signUpUser = () => {
+  if (otpValue.value === '') {
+    return;
+  }
+
+  const user: userTypes = {
+    id: Date.now(),
+    userName: authStore.user?.userName || '',
+    userEmail: authStore.user?.userEmail || '',
+    userPass: authStore.user?.userPass || '',
+    otpCode: otpValue.value,
+  };
+  authStore.signUpUser(user);
+};
 </script>
 
 <template>
@@ -25,7 +40,7 @@ const otpValue = ref('');
         </p>
       </div>
       <div class="flex w-full items-center justify-center px-4 sm:px-8">
-        <form class="flex h-full w-full flex-col gap-4">
+        <div class="flex h-full w-full flex-col gap-4">
           <div class="flex h-15 w-full items-center justify-center">
             <input
               v-model="otpValue"
@@ -47,6 +62,8 @@ const otpValue = ref('');
             </div>
           </div>
           <button
+            type="submit"
+            @click="signUpUser()"
             class="bg-jungle-green-900 flex h-15 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-white/10 text-white"
           >
             Verify
@@ -54,7 +71,7 @@ const otpValue = ref('');
           <p class="text-jungle-green-800 mb-4 h-full w-full text-center text-sm">
             Did not receive OTP? <a href="#" class="font-medium underline">Resend</a>
           </p>
-        </form>
+        </div>
       </div>
     </div>
   </section>
