@@ -5,6 +5,15 @@ import type { userTypes } from '../types/user';
 
 const authStore = authFunction();
 const otpValue = ref('');
+
+const user: userTypes = {
+  id: Date.now(),
+  userName: authStore.user?.userName || '',
+  userEmail: authStore.user?.userEmail || '',
+  userPass: authStore.user?.userPass || '',
+  otpCode: otpValue.value,
+};
+
 const signUpUser = () => {
   if (otpValue.value === '') {
     return;
@@ -40,7 +49,7 @@ const signUpUser = () => {
         </p>
       </div>
       <div class="flex w-full items-center justify-center px-4 sm:px-8">
-        <div class="flex h-full w-full flex-col gap-4">
+        <div class="flex h-full w-full flex-col items-center gap-4">
           <div class="flex h-15 w-full items-center justify-center">
             <input
               v-model="otpValue"
@@ -61,15 +70,22 @@ const signUpUser = () => {
               </div>
             </div>
           </div>
+          <p v-if="authStore.invalidOtpError" class="text-red-500">Please enter the valid codes.</p>
           <button
+            :disabled="authStore.isLoading"
+            :class="authStore.buttonDisabled"
             type="submit"
             @click="signUpUser()"
             class="bg-jungle-green-900 flex h-15 w-full cursor-pointer items-center justify-center rounded-xl border-2 border-white/10 text-white"
           >
-            Verify
+            <video v-if="authStore.isLoading" loop autoplay class="h-35 w-35">
+              <source src="../assets/animated icons/loading2.webm" />
+            </video>
+            {{ authStore.isLoading ? '' : 'Verify' }}
           </button>
           <p class="text-jungle-green-800 mb-4 h-full w-full text-center text-sm">
-            Did not receive OTP? <a href="#" class="font-medium underline">Resend</a>
+            Did not receive OTP?
+            <a href="#" @click="authStore.requestOtp(user)" class="font-medium underline">Resend</a>
           </p>
         </div>
       </div>
