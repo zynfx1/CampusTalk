@@ -30,7 +30,7 @@ export const signUp = async (req: Request, res: Response) => {
     );
 
     if (otpResult.rows.length === 0) {
-      return res.status(400).json({ msg: 'Invalid OTP code' });
+      return res.status(400).json({ msg: 'INVALID_OTP' });
     }
 
     const saltRounds = 10;
@@ -155,6 +155,7 @@ export const authProfile = async (req: authRequest, res: Response) => {
 export const deleteToken = async (req: Request, res: Response) => {
   try {
     res.clearCookie('auth_token');
+    res.clearCookie('csrf_token');
     res.status(200).json({ msg: 'Successfully logged out' });
   } catch (error) {
     res.status(500).json({ msg: 'Failed to log out' });

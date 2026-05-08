@@ -14,6 +14,7 @@ export const authFunction = defineStore(
     const userNameError = ref<boolean>(false);
     const userEmailError = ref<boolean>(false);
     const invalidEmailError = ref<boolean>(false);
+    const invalidOtpError = ref<boolean>(false);
 
     const checkAuthProfile = async () => {
       try {
@@ -22,7 +23,7 @@ export const authFunction = defineStore(
         await router.replace({ path: '/' });
         console.log(response.data.res);
       } catch (error) {
-        user.value = null;
+        //user.value = null;
       }
     };
 
@@ -48,6 +49,7 @@ export const authFunction = defineStore(
 
         if (errorType === 'USERNAME_TAKEN') {
           userNameError.value = true;
+      
           setTimeout(() => {
             userNameError.value = false;
           }, 2000);
@@ -73,16 +75,24 @@ export const authFunction = defineStore(
         isLoading.value = true;
         const [response] = await Promise.all([
           api.post('/auth/sign-up', users),
-          new Promise((resolve) => setTimeout(resolve, 2000)),
+          new Promise((resolve) => setTimeout(resolve, 10000)),
         ]);
         await router.replace({ path: '/' });
 
         user.value = response.data.res;
         csrfVerification();
         console.log('User signed up successfully', response.data.res);
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
         //isErrorModalVisible.value = true;
+
+        const errorType = error.response.data.msg;
+        if (errorType === 'INVALID_OTP') {
+          invalidOtpError.value = true;
+          setTimeout(() => {
+            invalidOtpError.value = false;
+          }, 2000);
+        }
         return;
       } finally {
         isLoading.value = false;
@@ -147,13 +157,15 @@ export const authFunction = defineStore(
       userNameError,
       userEmailError,
       invalidEmailError,
+      invalidOtpError,
     };
   },
   {
     persist: {
-      key: 'my-app-auth', // Custom key in localStorage
-      storage: localStorage, // Explicitly define storage
-      pick: ['user'], // Optional: ONLY persist the user, not 'isLoading'
+      key: 'my-app-auth',
+      storage: localStorage,
+      // Change 'pick' to 'paths'
+      pick: ['user'],
     },
   },
 );

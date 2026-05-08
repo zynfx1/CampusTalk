@@ -21,9 +21,11 @@ const signUpUser = () => {
     userEmail: newUserEmail.value,
     userPass: newUserPass.value,
   };
-  newUserName.value = '';
-  newUserEmail.value = '';
-  newUserPass.value = '';
+
+  if (authStore.userNameError) {
+    newUserName.value = '';
+  }
+
   authStore.user = user;
   authStore.requestOtp(user);
 };
