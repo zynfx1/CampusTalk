@@ -38,10 +38,7 @@ export const authFunction = defineStore(
     const requestOtp = async (user: userTypes) => {
       try {
         isLoading.value = true;
-        const response = await api.post('/auth/send-otp', {
-          userName: user.userName,
-          userEmail: user.userEmail,
-        });
+        const response = await api.post('/auth/send-otp', user);
         await router.replace({ path: '/auth/signup/otp' });
         console.log('OTP sent successfully', response.data);
       } catch (error: any) {
@@ -49,7 +46,7 @@ export const authFunction = defineStore(
 
         if (errorType === 'USERNAME_TAKEN') {
           userNameError.value = true;
-      
+
           setTimeout(() => {
             userNameError.value = false;
           }, 2000);
@@ -162,10 +159,9 @@ export const authFunction = defineStore(
   },
   {
     persist: {
-      key: 'my-app-auth',
+      key: 'user-auth',
       storage: localStorage,
-      // Change 'pick' to 'paths'
-      pick: ['user'],
+      pick: ['user.userEmail', 'user.userName'],
     },
   },
 );
