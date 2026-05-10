@@ -33,12 +33,14 @@ export const signUp = async (req: Request, res: Response) => {
       return res.status(400).json({ msg: 'INVALID_OTP' });
     }
 
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(userPass, saltRounds);
+    const fetchUserPass = await pool.query(
+      'SELECT user_pass FROM otp_table WHERE user_email = $1',
+      [userEmail],
+    );
 
     const result = await pool.query(
       'INSERT INTO user_table ( user_name, user_email, user_pass) VALUES ($1,$2,$3) RETURNING user_id, user_name, user_email',
-      [userName, userEmail, hashedPassword],
+      [userName, userEmail, fetchUserPass.rows[0].user_pass],
     );
 
     const user = result.rows[0];
@@ -88,6 +90,7 @@ export const signIn = async (req: Request, res: Response) => {
     const user = result.rows[0];
 
     if (!user) {
+      console.error('User not found');
       res.status(401).json({ msg: 'Invalid Credentials' });
       return;
     }
@@ -95,6 +98,7 @@ export const signIn = async (req: Request, res: Response) => {
     const isMatch = await bcrypt.compare(userPass, user.user_pass);
 
     if (!isMatch) {
+      console.error('Password mismatch');
       res.status(401).json({ msg: 'Invalid Credentials' });
       return;
     }
@@ -155,7 +159,7 @@ export const authProfile = async (req: authRequest, res: Response) => {
 export const deleteToken = async (req: Request, res: Response) => {
   try {
     res.clearCookie('auth_token');
-    res.clearCookie('csrf_token');
+    res.clearCookie('x-csrf-token');
     res.status(200).json({ msg: 'Successfully logged out' });
   } catch (error) {
     res.status(500).json({ msg: 'Failed to log out' });
@@ -163,7 +167,7 @@ export const deleteToken = async (req: Request, res: Response) => {
 };
 
 export const sendOtp = async (req: Request, res: Response) => {
-  const { userName, userEmail } = req.body;
+  const { userName, userEmail, userPass } = req.body;
   const resolveMx = promisify(dns.resolveMx);
 
   if (!userEmail || !validator.isEmail(userEmail)) {
@@ -199,6 +203,9 @@ export const sendOtp = async (req: Request, res: Response) => {
     return res.status(400).json({ msg: 'INVALID_EMAIL' });
   }
   try {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(userPass, saltRounds);
+
     const userNameExists = await pool.query(
       'SELECT * FROM user_table WHERE user_name = $1',
       [userName],
@@ -235,12 +242,9 @@ export const sendOtp = async (req: Request, res: Response) => {
     const otp = crypto.randomInt(100000, 999999).toString();
     const expires_at = new Date(Date.now() + 5 * 60000);
 
-    await pool.query('DELETE FROM otp_table WHERE user_email = $1', [
-      userEmail,
-    ]);
     await pool.query(
-      'INSERT INTO otp_table (user_email, otp_code, expires_at) VALUES ($1, $2, $3) RETURNING user_email',
-      [userEmail, otp, expires_at],
+      'INSERT INTO otp_table (user_email, otp_code, expires_at, user_pass) VALUES ($1, $2, $3, $4) RETURNING user_email',
+      [userEmail, otp, expires_at, hashedPassword],
     );
 
     await transporter.sendMail({
