@@ -120,7 +120,7 @@ export const signIn = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: 'Server error during log in' });
+    res.status(500).json({ msg: 'SERVER_ERROR' });
   }
 };
 
@@ -160,6 +160,7 @@ export const deleteToken = async (req: Request, res: Response) => {
   try {
     res.clearCookie('auth_token');
     res.clearCookie('x-csrf-token');
+
     res.status(200).json({ msg: 'Successfully logged out' });
   } catch (error) {
     res.status(500).json({ msg: 'Failed to log out' });

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import somethingWentWrong from '../components/somethingWentWrong.vue';
 import { ref } from 'vue';
 import { authFunction } from '../stores/authStore';
 import type { userTypes } from '../types/user';
@@ -16,6 +17,10 @@ const user: userTypes = {
 
 const signUpUser = () => {
   if (otpValue.value === '') {
+    authStore.invalidOtpError = true;
+    setTimeout(() => {
+      authStore.invalidOtpError = false;
+    }, 1000);
     return;
   }
 
@@ -31,6 +36,10 @@ const signUpUser = () => {
 </script>
 
 <template>
+  <somethingWentWrong
+    @close="authStore.closeErrorModal"
+    :showModal="authStore.isErrorModalVisible"
+  ></somethingWentWrong>
   <section class="bg-dark-khaki-300/55 flex min-h-dvh w-full items-center justify-center">
     <div
       class="bg-dark-khaki-200 font-poppins m-5 h-full rounded-xl border border-black/6 drop-shadow-lg drop-shadow-black/20 sm:max-w-md md:max-w-lg"

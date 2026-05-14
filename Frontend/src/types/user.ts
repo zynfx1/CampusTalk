@@ -4,4 +4,5 @@ export interface userTypes {
   userEmail: string;
   userPass: string;
   otpCode?: string;
+  isDraft?: boolean;
 }
